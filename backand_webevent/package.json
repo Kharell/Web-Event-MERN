@@ -1,0 +1,19 @@
+{
+  "name": "backand-webevent",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
+    "test:development": "",
+    "test:prodaksion": ""
+  },
+  "dependencies": {
+    "backand-webevent": "backand-webevent:",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "^5.1.0",
+    "morgan": "^1.10.1",
+    "nodemon": "^3.1.10"
+  }
+}
