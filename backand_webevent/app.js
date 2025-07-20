@@ -20,7 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // get ambil data
 app.get("/", (req, res) => {
   res.status(200).json({
-    message: "Back and page, Requoest Berhasil welcome",
+    message: "Back and page, Requoest Berhasil welcome Karolus Jone Kalang",
   });
 });
 
