@@ -7,10 +7,4 @@ router.get("/categories", (req, res) => {
   });
 });
 
-router.get("/nama", (req, res) => {
-  res.status(200).json({
-    message: "Welcome Page Nama Categories",
-  });
-});
-
 module.exports = router;
