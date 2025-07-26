@@ -1,13 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const { Create, index, find } = require("./controller");
+const { Create, index, find, update, distroy,  } = require("./controller");
 
-// get al data category
+// delete data category berdasarkan id
+router.post("/categories", Create);
+
+// get all data category
 router.get("/categories", index);
 
 // get one data category
 router.get("/categories/:id", find);
 
-router.post("/categories", Create);
+// update data category bersasarkan id
+router.put("/categories/:id", update);
+
+// delete data category berdasarkan id
+router.delete("/categories/:id", distroy);
+
 
 module.exports = router;

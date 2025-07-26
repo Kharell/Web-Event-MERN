@@ -31,7 +31,8 @@ const index = async (req, res, next) => {
 const find = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await Categories.findOne({ _id: id });
+
+    const result = await Categories.findOne({ _id: id }).select("_id name");
 
     // log eror sementara jika data id salah atau kosong
     if (!result) {
@@ -49,8 +50,50 @@ const find = async (req, res, next) => {
   }
 };
 
+// Update atau edit data category
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const result = await Categories.findOneAndUpdate(
+      { _id: id },
+      { name },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      message: "Update data Category",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Delete data category
+const distroy = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const result = await Categories.findOneAndDelete({ _id: id });
+    if (!result) {
+      return res.status(404).json({
+        message: "Data Category tidak ditemukan",
+      });
+    }
+    res.status(200).json({
+      message: "Data Category berhasil dihapus",
+      data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   Create,
   index,
   find,
+  update,
+  distroy,
 };
