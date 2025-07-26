@@ -1,24 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Create } = require("./controller");
+const { Create, index, find } = require("./controller");
 
-router.get("/categories", (req, res) => {
-  const data = [
-    {
-      _id: 1,
-      name: "Category 1 Seminar",
-    },
-    {
-      _id: 2,
-      name: "Category 2 Mern",
-    },
-  ];
+// get al data category
+router.get("/categories", index);
 
-  res.status(200).json({
-    message: "Success get all categories",
-    data,
-  });
-});
+// get one data category
+router.get("/categories/:id", find);
 
 router.post("/categories", Create);
 
