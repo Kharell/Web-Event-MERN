@@ -15,8 +15,9 @@ const db = mongoose.connection;
 
 // 5. Tambahkan event listener untuk error dan success
 db.on("error", (err) => console.error("connection error:", err));
-db.once("open", () => console.log("MongoDB connected successfully in port" + urlDB));
-
+db.once("open", () =>
+  console.log("MongoDB connected successfully in port" + urlDB)
+);
 
 // 6. Export db supaya bisa digunakan
 module.exports = db;
