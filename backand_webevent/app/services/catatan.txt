@@ -1,0 +1,42 @@
+🎯 Tujuan Membuat Service Layer:
+
+1. Memisahkan tugas:
+Model → hanya untuk skema dan query dasar database.
+Controller → menerima request dan kirim response.
+Service → memproses data dan logika utama.
+
+2. Mudah di-maintenance:
+Saat ada perubahan logika (contoh: validasi tambahan, perhitungan), cukup ubah di file service.js, tanpa mengubah controller atau model.
+
+3. Menghindari duplikasi kode:
+Fungsi seperti findUserById() bisa dipakai di banyak controller.
+
+4. Lebih rapi dan profesional:
+Struktur kode jadi terorganisir dan siap untuk dikembangkan lebih lanjut.
+
+
+🧱 Struktur Folder Contoh:
+/models       → skema database (Mongoose)
+/services     → logika bisnis (createUser, updateEvent)
+/controllers  → handler request & response
+/routes       → route endpoint API
+
+
+🔁 Alur Kerja:
+Route → Controller → Service → Model (Database)
+
+
+📌 Contoh Fungsi di Service:
+conroh services/userService.js
+
+const User = require("../models/userModel");
+
+const createUser = async (data) => {
+  return await User.create(data);
+};
+
+const getUserById = async (id) => {
+  return await User.findById(id);
+};
+
+module.exports = { createUser, getUserById };

@@ -13,7 +13,8 @@ const apiV1 = "/api/v1/cms";
 
 // import Midleware
 const notFound = require("./app/middlewares/not-found");
-const henadleErrorMiddleware = require("./app/middlewares/handle-error");
+const errorHendlerMiddleware = require("./app/middlewares/heandler-error.js");
+
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -35,8 +36,8 @@ app.use(apiV1, categoriesRoutes);
 // pastikan menyimpan kode ini di simpan di bawah kode route karen kode route harus di baca dan di jalan kan
 // terlebih dahulu baru kode middleware maka jika terbalik maka akan error dan menghasilkan eror 404 not found
 // middleware untuk menangani error
-app.use(henadleErrorMiddleware);
+app.use(notFound);
 // middleware untuk menangani route yang tidak ditemukan
-app.use(notFoundMiddleware);
+app.use(errorHendlerMiddleware);
 
 module.exports = app;

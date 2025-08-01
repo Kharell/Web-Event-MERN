@@ -1,10 +1,10 @@
 const Categories = require("./model");
+const { createCategory, getAllCategories } = require("../../../services/mongoose/categories");
 
-// create atau posting data
+// create atau posting data categories
 const Create = async (req, res, next) => {
   try {
-    const { name } = req.body;
-    const result = await Categories.create({ name });
+    const result = await createCategory(req);
     res.status(201).json({
       message: "Category Created",
       data: result,
@@ -17,7 +17,7 @@ const Create = async (req, res, next) => {
 // get all data atau ambil semua data
 const index = async (req, res, next) => {
   try {
-    const result = await Categories.find().select("_id name");
+    const result = await getAllCategories();
     res.status(200).json({
       message: "Get all data Category ",
       data: result,

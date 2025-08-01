@@ -1,10 +1,14 @@
 // code untuk menghendle semua eror yang ada di folder errors
 
-const { statusCode } = require("http-status-codes");
+const { StatusCodes } = require("http-status-codes");
 const errorHendlerMiddleware = (err, req, res, next) => {
+
+   console.log('err');
+   console.log(err.message);
+
   let customError = {
     // set default
-    statusCode: err.statusCode || statusCode.INTERNAL_SERVER_ERROR,
+    statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
     msg: err.message || "Something went wrong try again later",
   };
   // error validation dari mongoose untuk kode model db
