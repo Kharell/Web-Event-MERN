@@ -1,16 +1,19 @@
-const Categories = require("./model");
+const { StatusCodes } = require("http-status-codes");
 
 // import service untuk categories
 const {
   getAllCategories,
   createCategories,
+  getOneCategories,
+  updateCategories,
+  deleteCategories,
 } = require("../../../services/mongoose/categories");
 
 // create atau posting data categories
 const Create = async (req, res, next) => {
   try {
     const result = await createCategories(req);
-    res.status(201).json({
+    res.status(StatusCodes.CREATED).json({
       message: "Category Created",
       data: result,
     });
@@ -23,7 +26,7 @@ const Create = async (req, res, next) => {
 const index = async (req, res, next) => {
   try {
     const result = await getAllCategories();
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       message: "Get all data Category ",
       data: result,
     });
@@ -35,18 +38,9 @@ const index = async (req, res, next) => {
 // get data berdasarkan id
 const find = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const result = await getOneCategories(req);
 
-    const result = await Categories.findOne({ _id: id }).select("_id name");
-
-    // log eror sementara jika data id salah atau kosong
-    if (!result) {
-      return res.status(404).json({
-        message: "Data Category tidak di temukan",
-      });
-    }
-
-    res.status(200).json({
+    res.status(StatusCodes.OK).json({
       message: "Get data berdasarkan id Category",
       data: result,
     });
@@ -58,16 +52,8 @@ const find = async (req, res, next) => {
 // Update atau edit data category
 const update = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const { name } = req.body;
-
-    const result = await Categories.findOneAndUpdate(
-      { _id: id },
-      { name },
-      { new: true, runValidators: true }
-    );
-
-    res.status(200).json({
+    const result = await updateCategories(req);
+    res.status(StatusCodes.OK).json({
       message: "Update data Category",
       data: result,
     });
@@ -79,14 +65,8 @@ const update = async (req, res, next) => {
 // Delete data category
 const distroy = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const result = await Categories.findOneAndDelete({ _id: id });
-    if (!result) {
-      return res.status(404).json({
-        message: "Data Category tidak ditemukan",
-      });
-    }
-    res.status(200).json({
+    const result = await deleteCategories(req);
+    res.status(StatusCodes.OK).json({
       message: "Data Category berhasil dihapus",
       data: result,
     });
