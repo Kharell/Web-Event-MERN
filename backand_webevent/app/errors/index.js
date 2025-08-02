@@ -2,11 +2,11 @@
 // maka di gunakan saja file index.js ini agar terpusat ke satu file
 
 const CustomApiError = require("./custom-api-error");
-const BadRequest = require("./bad-request");
+const BadRequestError = require("./bad-request");
 const NotFound = require("./not-found");
 
 module.exports = {
   CustomApiError,
-  BadRequest,
+  BadRequestError,
   NotFound,
 };

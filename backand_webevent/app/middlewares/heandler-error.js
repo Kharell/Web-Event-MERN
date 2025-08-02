@@ -3,8 +3,9 @@
 const { StatusCodes } = require("http-status-codes");
 const errorHendlerMiddleware = (err, req, res, next) => {
 
-   console.log('err');
-   console.log(err.message);
+  // log untuk melihat eror di terminal
+  // console.log("err");
+  // console.log(err.message);
 
   let customError = {
     // set default

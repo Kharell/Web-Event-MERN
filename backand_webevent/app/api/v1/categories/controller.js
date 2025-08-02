@@ -1,10 +1,15 @@
 const Categories = require("./model");
-const { createCategory, getAllCategories } = require("../../../services/mongoose/categories");
+
+// import service untuk categories
+const {
+  getAllCategories,
+  createCategories,
+} = require("../../../services/mongoose/categories");
 
 // create atau posting data categories
 const Create = async (req, res, next) => {
   try {
-    const result = await createCategory(req);
+    const result = await createCategories(req);
     res.status(201).json({
       message: "Category Created",
       data: result,
