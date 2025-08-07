@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { create } = require("./controller");
 
-router.post("/images", create);
+const upload = require("../../../middlewares/multer");
+
+router.post("/images", upload.single("Img Avatar"), create);
 
 module.exports = router;

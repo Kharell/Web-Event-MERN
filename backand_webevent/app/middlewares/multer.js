@@ -12,10 +12,14 @@ const storage = multer.diskStorage({
 
 // Filter file yang diizinkan
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
     cb(null, true);
   } else {
-    cb(new Error("Unsupported file format"), false);
+    cb(new Error("Format file harus JPEG, PNG, atau JPG"), false);
   }
 };
 
@@ -23,9 +27,9 @@ const fileFilter = (req, file, cb) => {
 const uploadMiddleware = multer({
   storage,
   limits: {
-    fileSize: 3 * 1024 * 1024, // 3MB
+    fileSize: 30000000, 
   },
-  fileFilter, // ← perhatikan: bukan `filterFile`
+  fileFilter: fileFilter, 
 });
 
 module.exports = uploadMiddleware;

@@ -24,6 +24,6 @@ const genereteUrlImage = async (req) => {
 };
 
 module.exports = {
-    createImages,
-    genereteUrlImage
+  createImages,
+  genereteUrlImage,
 };
