@@ -5,12 +5,12 @@ const logger = require("morgan");
 
 var app = express();
 
+// inisialisasi route ke dalam variabel untuk di konsum ke api
+const apiV1 = "/api/v1/cms";
+
 // import routes
 const categoriesRoutes = require("./app/api/v1/categories/router.js");
 const imagesRoutes = require("./app/api/v1/images/router.js");
-
-// inisialisasi route ke dalam variabel untuk di konsum ke api
-const apiV1 = "/api/v1/cms";
 
 // import Midleware
 const notFound = require("./app/middlewares/not-found");

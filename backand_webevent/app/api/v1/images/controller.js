@@ -4,15 +4,15 @@ const { createImages } = require("../../../services/mongoose/images");
 const create = async (req, res, next) => {
   try {
     // melihat dia berhasil atau tidak berhasil upload
-    console.log("req.file");
-    console.log(req.file);
+   console.log("req.file");
+   console.log(req.file);
 
     const result = await createImages(req);
     res.status(StatusCodes.CREATED).json({
       data: result,
     });
   } catch (error) {
-    next(error);
+    next(error);    
   }
 };
 
