@@ -10,10 +10,10 @@
 const Images = require("../../api/v1/images/model");
 
 // cara ke 2
-const genereteUrlImage = async (req) => {
-  const result = `uploads/${req.file.filename}`;
-  return result;
-};
+// const genereteUrlImage = async (req) => {
+//   const result = `uploads/${req.file.filename}`;
+//   return result;
+// };
 
 // cara ke 1
 const createImages = async (req) => {
@@ -25,7 +25,19 @@ const createImages = async (req) => {
   return result;
 };
 
+// tambahkan functioncheking image
+const chekingImage = async (id) => {
+  const result = await Images.findOne({ _id: id });
+  console.log(result);
+
+  if (!result) {
+    throw new NotFoundError(`Tidak ada gambar dengan id: ${id}`);
+  }
+  return result;
+};
+
 module.exports = {
-  genereteUrlImage,
+  // genereteUrlImage,
   createImages,
+  chekingImage,
 };
