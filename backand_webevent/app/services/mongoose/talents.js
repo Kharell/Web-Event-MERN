@@ -10,10 +10,12 @@ const getAllTalents = async (req) => {
 
   let condition = {};
   if (keyword) {
+    // gunakan regex untuk pencarian mirip dengan mengetikan huruf apa saja data akan muncul tanpa harus sama dengan penulisan data aslinya
     condition = { ...condition, name: { $regex: keyword, $options: "i" } };
   }
 
   const result = await Talents.find(condition)
+    // gunakan populate untuk menampilkan data relasi dari collection image dan secara tidak langsung membuat relasi
     .populate({
       path: "image",
       select: "_id name",

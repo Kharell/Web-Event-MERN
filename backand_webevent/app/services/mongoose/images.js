@@ -9,6 +9,9 @@
 
 const Images = require("../../api/v1/images/model");
 
+// import custom error not found dan bad request
+const { NotFoundError } = require("../../errors");
+
 // cara ke 2
 // const genereteUrlImage = async (req) => {
 //   const result = `uploads/${req.file.filename}`;

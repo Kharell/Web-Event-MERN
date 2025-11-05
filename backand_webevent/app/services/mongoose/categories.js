@@ -1,4 +1,6 @@
 const Categories = require("../../api/v1/categories/model");
+
+// import custom error not found dan bad request
 const { BadRequestError, NotFoundError } = require("../../errors");
 
 //1. service untuk get all categories

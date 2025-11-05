@@ -9,6 +9,7 @@ let talentsSchema = new Schema(
     },
     role: {
       type: String,
+      // jika inign tidak menetapkan atau mengisi maka akan di set dengan karakter _
       default: "_",
     },
     // untuk membuat relasi di mongodb kita perlu membuat type objectId
