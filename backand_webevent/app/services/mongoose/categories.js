@@ -71,6 +71,7 @@ const deleteCategories = async (req) => {
     throw new NotFoundError(`Tidak ada categories dengan id: ${id}`);
   }
 
+  // hapus berdasarkan id categories
   await Categories.deleteOne({ _id: id });
   return result;
 };

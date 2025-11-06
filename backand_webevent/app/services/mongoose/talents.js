@@ -5,6 +5,8 @@ const { chekingImage } = require("./images");
 // import custom error not found dan bad request
 const { NotFoundError, BadRequestError } = require("../../errors");
 
+
+// 1. service untuk get all talents
 const getAllTalents = async (req) => {
   const { keyword } = req.query;
 
@@ -25,6 +27,8 @@ const getAllTalents = async (req) => {
   return result;
 };
 
+
+// 2. service untuk create atau posting data talents
 const createTalents = async (req) => {
   const { name, role, image } = req.body;
 
@@ -47,6 +51,8 @@ const createTalents = async (req) => {
   return result;
 };
 
+
+// 3. service untuk get talents by id atau find one data talents
 const getOneTalents = async (req) => {
   const { id } = req.params;
 
@@ -59,6 +65,8 @@ const getOneTalents = async (req) => {
   return result;
 };
 
+
+// 4. service untuk update talents
 const updateTalents = async (req) => {
   const { id } = req.params;
   const { name, role, image } = req.body;
@@ -86,6 +94,8 @@ const updateTalents = async (req) => {
   return result;
 };
 
+
+// 5. service untuk delete talents
 const deleteTalents = async (req) => {
   const { id } = req.params;
   const result = await Talents.findOne({ _id: id });
@@ -94,7 +104,8 @@ const deleteTalents = async (req) => {
     throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
   }
 
-  await result.remove();
+  // hapus berdasarkan id talents
+  await Talents.deleteOne({ _id: id });
   return result;
 };
 

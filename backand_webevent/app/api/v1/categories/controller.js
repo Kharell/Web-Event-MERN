@@ -67,7 +67,7 @@ const distroy = async (req, res, next) => {
   try {
     const result = await deleteCategories(req);
     res.status(StatusCodes.OK).json({
-      message: "Data Category berhasil dihapus",
+      message: `Data dengan id ${req.params.id} berhasil dihapus`,
       data: result,
     });
   } catch (err) {

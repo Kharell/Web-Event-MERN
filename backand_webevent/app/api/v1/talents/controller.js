@@ -8,6 +8,7 @@ const {
 
 const { StatusCodes } = require("http-status-codes");
 
+// create atau posting data talents
 const create = async (req, res, next) => {
   try {
     const result = await createTalents(req);
@@ -20,6 +21,7 @@ const create = async (req, res, next) => {
   }
 };
 
+// get all data atau ambil semua data
 const index = async (req, res, next) => {
   try {
     const result = await getAllTalents(req);
@@ -32,6 +34,7 @@ const index = async (req, res, next) => {
   }
 };
 
+// get data berdasarkan id
 const find = async (req, res, next) => {
   try {
     const result = await getOneTalents(req);
@@ -44,6 +47,7 @@ const find = async (req, res, next) => {
   }
 };
 
+// Update atau edit data
 const update = async (req, res, next) => {
   try {
     const result = await updateTalents(req);
@@ -56,11 +60,14 @@ const update = async (req, res, next) => {
   }
 };
 
+
+// delete data talents
 const destroy = async (req, res, next) => {
   try {
     const result = await deleteTalents(req);
 
     res.status(StatusCodes.OK).json({
+      message:`Data dengan id ${req.params.id} berhasil dihapus`,
       data: result,
     });
   } catch (err) {
