@@ -76,10 +76,18 @@ const deleteCategories = async (req) => {
   return result;
 };
 
+// service untuk checking categories berdasarkan id
+const checkingCategories = async (id) => {
+  const result = await Categories.findOne({ _id: id });
+  if (!result) throw new NotFoundError(`Tidak ada categories dengan id: ${id}`);
+  return result;
+};
+
 module.exports = {
   getAllCategories,
   createCategories,
   getOneCategories,
   updateCategories,
   deleteCategories,
+  checkingCategories,
 };
