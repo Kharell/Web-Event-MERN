@@ -8,10 +8,15 @@ var app = express();
 // inisialisasi route ke dalam variabel untuk di konsum ke api
 const apiV1 = "/api/v1/cms";
 
+
+
 // import routes
 const categoriesRoutes = require("./app/api/v1/categories/router.js");
 const imagesRoutes = require("./app/api/v1/images/router.js");
 const talentsRoutes = require("./app/api/v1/talents/router.js");
+const eventsRoutes = require("./app/api/v1/events/router.js");
+
+
 
 // import Midleware
 const notFound = require("./app/middlewares/not-found");
@@ -31,10 +36,14 @@ app.get("/", (req, res) => {
   });
 });
 
+
 // memanggil route yang mau di pake
 app.use(apiV1, categoriesRoutes);
 app.use(apiV1, imagesRoutes);
 app.use(apiV1, talentsRoutes);
+app.use(apiV1, eventsRoutes);
+
+
 
 // pastikan menyimpan kode ini di simpan di bawah kode route karen kode route harus di baca dan di jalan kan
 // terlebih dahulu baru kode middleware maka jika terbalik maka akan error dan menghasilkan eror 404 not found
