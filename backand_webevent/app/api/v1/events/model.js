@@ -70,11 +70,13 @@ const EventSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
-    talents: {
-      type: [mongoose.Types.ObjectId],
-      ref: "Talent",
-      required: true,
-    },
+    talents: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "Talents",
+        required: true,
+      },
+    ],
   },
   { timestamps: true }
 );

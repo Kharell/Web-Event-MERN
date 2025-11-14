@@ -1,23 +1,34 @@
 // import model talents
 const Talents = require("../../api/v1/talents/model");
-const { chekingImage } = require("./images");
+const { checkingImage } = require("./images");
 
 // import custom error not found dan bad request
 const { NotFoundError, BadRequestError } = require("../../errors");
 
+// 0. CEK TALENTS BERDASARKAN ID
+const checkingTalents = async (id) => {
+  const result = await Talents.findOne({ _id: id });
 
-// 1. service untuk get all talents
+  if (!result) {
+    throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
+  }
+
+  return result;
+};
+
+// 1. GET ALL TALENTS
 const getAllTalents = async (req) => {
   const { keyword } = req.query;
 
   let condition = {};
   if (keyword) {
-    // gunakan regex untuk pencarian mirip dengan mengetikan huruf apa saja data akan muncul tanpa harus sama dengan penulisan data aslinya
-    condition = { ...condition, name: { $regex: keyword, $options: "i" } };
+    condition = {
+      ...condition,
+      name: { $regex: keyword, $options: "i" },
+    };
   }
 
   const result = await Talents.find(condition)
-    // gunakan populate untuk menampilkan data relasi dari collection image dan secara tidak langsung membuat relasi
     .populate({
       path: "image",
       select: "_id name",
@@ -27,17 +38,15 @@ const getAllTalents = async (req) => {
   return result;
 };
 
-
-// 2. service untuk create atau posting data talents
+// 2. CREATE TALENT
 const createTalents = async (req) => {
   const { name, role, image } = req.body;
 
-  // cek image berdasarkan field image
-  await chekingImage(image);
+  // cek image
+  await checkingImage(image);
 
-  // cek apakah talents dengan field name sudah ada
+  // cek duplicate talent berdasarkan name
   const check = await Talents.findOne({ name });
-
   if (check) {
     throw new BadRequestError("Pembicara sudah terdaftar");
   }
@@ -51,13 +60,11 @@ const createTalents = async (req) => {
   return result;
 };
 
-
-// 3. service untuk get talents by id atau find one data talents
+// 3. GET TALENT BY ID
 const getOneTalents = async (req) => {
   const { id } = req.params;
 
   const result = await Talents.findOne({ _id: id });
-
   if (!result) {
     throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
   }
@@ -65,17 +72,19 @@ const getOneTalents = async (req) => {
   return result;
 };
 
-
-// 4. service untuk update talents
+// 4. UPDATE TALENT
 const updateTalents = async (req) => {
   const { id } = req.params;
   const { name, role, image } = req.body;
 
-  // cek image berdasarkan field image
-  await chekingImage(image);
+  // cek image
+  await checkingImage(image);
 
-  // cek talents dengan field name selain id yang dikirim
-  const check = await Talents.findOne({ name, _id: { $ne: id } });
+  // cek name selain id yang sedang diupdate
+  const check = await Talents.findOne({
+    name,
+    _id: { $ne: id },
+  });
 
   if (check) {
     throw new BadRequestError("Pembicara sudah terdaftar");
@@ -94,18 +103,17 @@ const updateTalents = async (req) => {
   return result;
 };
 
-
-// 5. service untuk delete talents
+// 5. DELETE TALENT
 const deleteTalents = async (req) => {
   const { id } = req.params;
-  const result = await Talents.findOne({ _id: id });
 
+  const result = await Talents.findOne({ _id: id });
   if (!result) {
     throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
   }
 
-  // hapus berdasarkan id talents
   await Talents.deleteOne({ _id: id });
+
   return result;
 };
 
@@ -115,4 +123,5 @@ module.exports = {
   getOneTalents,
   updateTalents,
   deleteTalents,
+  checkingTalents, // WAJIB: dipakai oleh events
 };
