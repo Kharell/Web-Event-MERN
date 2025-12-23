@@ -28,6 +28,8 @@ const getAllEvents = async (req) => {
       populate: { path: "image", select: "_id name" },
     });
 
+  // jika admin ingin menampilkan data tertentu saja maka select
+  // .select("_id title");
   return result;
 };
 
@@ -86,7 +88,7 @@ const getOneEvents = async (req) => {
       populate: { path: "image", select: "_id name" },
     });
 
-  if (!result) throw new NotFoundError(`Tidak ada event dengan id: ${id}`);
+  if (!result) throw new NotFoundError(`Tidak ada Acara dengan id: ${id}`);
 
   return result;
 };
