@@ -4,7 +4,9 @@ const { checkingCategories } = require("./categories");
 const { checkingTalents } = require("./talents");
 const { BadRequestError, NotFoundError } = require("../../errors");
 
-// 1. Service untuk get semua events
+/**
+ * 1. Service untuk get semua events
+ */
 const getAllEvents = async (req) => {
   const { keyword, category, talent } = req.query;
   let condition = {};
@@ -28,12 +30,12 @@ const getAllEvents = async (req) => {
       populate: { path: "image", select: "_id name" },
     });
 
-  // jika admin ingin menampilkan data tertentu saja maka select
-  // .select("_id title");
   return result;
 };
 
-// 2. Service untuk membuat (create) event baru
+/**
+ * 2. Service untuk membuat (create) event baru
+ */
 const createEvents = async (req) => {
   const {
     title,
@@ -49,7 +51,7 @@ const createEvents = async (req) => {
     talents,
   } = req.body;
 
-  // Validasi foreign key
+  // Validasi foreign key (Image, Category, Talent harus ada di DB)
   await checkingImage(image);
   await checkingCategories(category);
   await checkingTalents(talents);
@@ -75,7 +77,9 @@ const createEvents = async (req) => {
   return result;
 };
 
-// 3. Service untuk get satu event berdasarkan ID
+/**
+ * 3. Service untuk get satu event berdasarkan ID
+ */
 const getOneEvents = async (req) => {
   const { id } = req.params;
 
@@ -88,12 +92,14 @@ const getOneEvents = async (req) => {
       populate: { path: "image", select: "_id name" },
     });
 
-  if (!result) throw new NotFoundError(`Tidak ada Acara dengan id: ${id}`);
+  if (!result) throw new NotFoundError(`Tidak ada ACARA dengan id: ${id}`);
 
   return result;
 };
 
-// 4. Service untuk update event berdasarkan ID
+/**
+ * 4. Service untuk update event berdasarkan ID
+ */
 const updateEvents = async (req) => {
   const { id } = req.params;
   const {
@@ -110,14 +116,22 @@ const updateEvents = async (req) => {
     talents,
   } = req.body;
 
+  // Validasi foreign key
   await checkingImage(image);
   await checkingCategories(category);
   await checkingTalents(talents);
 
-  // Cek apakah nama event sudah dipakai oleh event lain
-  const check = await Events.findOne({ title, _id: { $ne: id } });
-  if (check) throw new BadRequestError("Judul acara event sudah terdaftar");
+  // 1. Cari event berdasarkan ID (Memperbaiki error 'result is not defined')
+  const checkEvnt = await Events.findOne({ _id: id });
+  if (!checkEvnt)
+    throw new NotFoundError(`Tidak ada acara event dengan id: ${id}`);
 
+  // 2. Cek apakah judul baru sudah dipakai oleh event lain (kecuali dirinya sendiri)
+  const checkTitle = await Events.findOne({ title, _id: { $ne: id } });
+  if (checkTitle)
+    throw new BadRequestError("Judul acara event sudah terdaftar");
+
+  // 3. Eksekusi Update
   const result = await Events.findOneAndUpdate(
     { _id: id },
     {
@@ -136,16 +150,17 @@ const updateEvents = async (req) => {
     { new: true, runValidators: true }
   );
 
-  if (!result) throw new NotFoundError(`Tidak ada event dengan id: ${id}`);
   return result;
 };
 
-// 5. Service untuk menghapus event berdasarkan ID
+/**
+ * 5. Service untuk menghapus event berdasarkan ID
+ */
 const deleteEvents = async (req) => {
   const { id } = req.params;
 
   const result = await Events.findOne({ _id: id });
-  if (!result) throw new NotFoundError(`Tidak ada event dengan id: ${id}`);
+  if (!result) throw new NotFoundError(`Tidak ada acara event dengan id: ${id}`);
 
   await result.deleteOne();
   return result;
