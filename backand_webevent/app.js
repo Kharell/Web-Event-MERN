@@ -15,6 +15,7 @@ const categoriesRoutes = require("./app/api/v1/categories/router.js");
 const imagesRoutes = require("./app/api/v1/images/router.js");
 const talentsRoutes = require("./app/api/v1/talents/router.js");
 const eventsRoutes = require("./app/api/v1/events/router.js");
+const organizersRoutes = require("./app/api/v1/organizers/router.js");
 
 
 
@@ -42,6 +43,7 @@ app.use(apiV1, categoriesRoutes);
 app.use(apiV1, imagesRoutes);
 app.use(apiV1, talentsRoutes);
 app.use(apiV1, eventsRoutes);
+app.use(apiV1, organizersRoutes);
 
 
 

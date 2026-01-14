@@ -4,6 +4,7 @@ const { model, Schema } = mongoose;
 let organizerSchema = Schema(
   {
     organizers: {
+      // Field ini yang akan menyimpan nama penyelenggara
       type: String,
       required: [true, "Penyelenggara harus diisi"],
     },
