@@ -1,16 +1,11 @@
-const jwt = require('jsonwebtoken');
-const { jwtScrest, jawtExpiration } = require('../config');
-
-const createJWT = ({ payload }) => {
-    const token = jwt.sign(payload, jwtScrest, {
-        expiresIn: jawtExpiration,
-    });
-    return token;
+const createTokenUser = (user) => {
+  return {
+    name: user.name,
+    userId: user._id,
+    role: user.role,
+    email: user.email,
+    organizer: user.organizer,
+  };
 };
 
-const isTokenValid = ({ token }) => jwt.verify(token, jwtScrest);
-
-module.exports = {
-    createJWT,
-    isTokenValid,
-};
+module.exports = createTokenUser;
