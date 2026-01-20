@@ -16,7 +16,7 @@ const signin = async (req) => {
 
   // 3. Jika user tidak ditemukan
   if (!result) {
-    throw new UnauthorizedError("Kredensial tidak valid");
+    throw new UnauthorizedError("email tidak valid");
   }
 
   // 4. Cek apakah password benar
@@ -24,7 +24,7 @@ const signin = async (req) => {
   const isPasswordCorrect = await result.comparePassword(password);
 
   if (!isPasswordCorrect) {
-    throw new UnauthorizedError("Kredensial tidak valid");
+    throw new UnauthorizedError("pasword tidak valid");
   }
 
   // 5. Jika semua benar, buat Token
