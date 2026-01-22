@@ -3,22 +3,42 @@ const router = express.Router();
 const { Create, index, find, update, distroy } = require("./controller");
 const {
   authenticateUser,
-  //   authorizeRoles,
+  authorizeRoles,
 } = require("../../../middlewares/auth");
 
 // get all data category
-router.get("/categories", authenticateUser, index);
+router.get("/categories", authenticateUser, authorizeRoles("organizer"), index);
 
-// delete data category berdasarkan id
-router.post("/categories", Create);
+// create atau posting data category
+router.post(
+  "/categories",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  Create,
+);
 
 // get one data category
-router.get("/categories/:id", find);
+router.get(
+  "/categories/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  find,
+);
 
 // update data category bersasarkan id
-router.put("/categories/:id", update);
+router.put(
+  "/categories/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  update,
+);
 
 // delete data category berdasarkan id
-router.delete("/categories/:id", distroy);
+router.delete(
+  "/categories/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  distroy,
+);
 
 module.exports = router;

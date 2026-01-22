@@ -4,20 +4,24 @@ const Categories = require("../../api/v1/categories/model");
 const { BadRequestError, NotFoundError } = require("../../errors");
 
 //1. service untuk get all categories
-const getAllCategories = async () => {
-  const result = await Categories.find({});
+const getAllCategories = async (req) => {
+  const result = await Categories.find({ organizer: req.user.organizer });
   return result;
 };
 
 //2. service untuk create atau posting data categories
 const createCategories = async (req) => {
   const { name } = req.body;
-  // Cari categories dengan fild name
-  const chechk = await Categories.findOne({ name });
-  // apa bila cech true / data categories sudah ada maka tampilkan error
-  if (chechk) throw new BadRequestError("Category Nama duplikat");
 
-  const result = await Categories.create({ name });
+  // Cari categories dengan fild name
+  const check = await Categories.findOne({ name });
+  // apa bila cech true / data categories sudah ada maka tampilkan error
+  if (check) throw new BadRequestError("Category Nama duplikat");
+
+  const result = await Categories.create({
+    name,
+    organizer: req.user.organizer,
+  });
 
   return result;
 };
@@ -26,7 +30,10 @@ const createCategories = async (req) => {
 const getOneCategories = async (req) => {
   const { id } = req.params;
 
-  const result = await Categories.findOne({ _id: id });
+  const result = await Categories.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
   if (!result) {
     throw new NotFoundError(`Tidak ada categories dengan id: ${id} `);
   }
@@ -42,18 +49,19 @@ const updateCategories = async (req) => {
   // fungsi dari kode $ne adalah untuk mengecualikan id yang sedang di update dan mencari id lain yang sama
   const check = await Categories.findOne({
     name,
+    organizer: req.user.organizer,
     _id: { $ne: id },
   });
   // apa bila cech true / data categories sudah ada maka tampilkan error
   if (check)
     throw new BadRequestError(
-      "Category Nama duplikat atau sudah ada data yang sama"
+      "Category Nama duplikat atau sudah ada data yang sama",
     );
 
   const result = await Categories.findOneAndUpdate(
     { _id: id },
     { name },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
   if (!result) {
     throw new NotFoundError(`Tidak ada categories dengan id: ${id} `);
@@ -65,7 +73,10 @@ const updateCategories = async (req) => {
 const deleteCategories = async (req) => {
   const { id } = req.params;
 
-  const result = await Categories.findOne({ _id: id });
+  const result = await Categories.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
 
   if (!result) {
     throw new NotFoundError(`Tidak ada categories dengan id: ${id}`);

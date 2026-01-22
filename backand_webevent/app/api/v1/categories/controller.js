@@ -25,7 +25,7 @@ const Create = async (req, res, next) => {
 // get all data atau ambil semua data
 const index = async (req, res, next) => {
   try {
-    const result = await getAllCategories();
+    const result = await getAllCategories(req);
     res.status(StatusCodes.OK).json({
       message: "Get all data Category ",
       data: result,
