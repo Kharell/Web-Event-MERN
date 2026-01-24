@@ -10,10 +10,12 @@ const authenticateUser = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-
+  // console.log("Token yang di dapat dari organiser adalah : ", token);
   try {
     // 2. Verifikasi token
     const payload = isTokenValid({ token });
+
+    // console.log("Data user terbaru adalah : ", payload);
 
     // 3. Lampirkan data user ke object request (req.user)
     req.user = {
