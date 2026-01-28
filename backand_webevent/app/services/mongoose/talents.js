@@ -20,7 +20,8 @@ const checkingTalents = async (id) => {
 const getAllTalents = async (req) => {
   const { keyword } = req.query;
 
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
+
   if (keyword) {
     condition = {
       ...condition,
@@ -46,7 +47,7 @@ const createTalents = async (req) => {
   await checkingImage(image);
 
   // cek duplicate talent berdasarkan name
-  const check = await Talents.findOne({ name });
+  const check = await Talents.findOne({ name, organizer: req.user.organizer });
   if (check) {
     throw new BadRequestError("Pembicara sudah terdaftar");
   }
@@ -55,6 +56,7 @@ const createTalents = async (req) => {
     name,
     role,
     image,
+    organizer: req.user.organizer,
   });
 
   return result;
@@ -64,7 +66,7 @@ const createTalents = async (req) => {
 const getOneTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await Talents.findOne({ _id: id });
+  const result = await Talents.findOne({ _id: id, organizer: req.user.organizer });
   if (!result) {
     throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
   }
@@ -83,6 +85,7 @@ const updateTalents = async (req) => {
   // cek name selain id yang sedang diupdate
   const check = await Talents.findOne({
     name,
+    organizer: req.user.organizer,
     _id: { $ne: id },
   });
 
@@ -92,8 +95,8 @@ const updateTalents = async (req) => {
 
   const result = await Talents.findOneAndUpdate(
     { _id: id },
-    { name, role, image },
-    { new: true, runValidators: true }
+    { name, role, image, organizer: req.user.organizer },
+    { new: true, runValidators: true },
   );
 
   if (!result) {
@@ -107,12 +110,12 @@ const updateTalents = async (req) => {
 const deleteTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await Talents.findOne({ _id: id });
+  const result = await Talents.findOne({ _id: id, organizer: req.user.organizer });
   if (!result) {
     throw new NotFoundError(`Tidak ada pembicara dengan id: ${id}`);
   }
 
-  await Talents.deleteOne({ _id: id });
+  await result.remove();
 
   return result;
 };

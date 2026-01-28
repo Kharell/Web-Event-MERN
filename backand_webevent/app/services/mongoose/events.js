@@ -9,7 +9,7 @@ const { BadRequestError, NotFoundError } = require("../../errors");
  */
 const getAllEvents = async (req) => {
   const { keyword, category, talent } = req.query;
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
 
   if (keyword) {
     condition = { ...condition, title: { $regex: keyword, $options: "i" } };
@@ -72,6 +72,7 @@ const createEvents = async (req) => {
     image,
     category,
     talents,
+    organizer: req.user.organizer,
   });
 
   return result;
@@ -83,7 +84,10 @@ const createEvents = async (req) => {
 const getOneEvents = async (req) => {
   const { id } = req.params;
 
-  const result = await Events.findOne({ _id: id })
+  const result = await Events.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  })
     .populate({ path: "image", select: "_id name" })
     .populate({ path: "category", select: "_id name" })
     .populate({
@@ -127,7 +131,11 @@ const updateEvents = async (req) => {
     throw new NotFoundError(`Tidak ada acara event dengan id: ${id}`);
 
   // 2. Cek apakah judul baru sudah dipakai oleh event lain (kecuali dirinya sendiri)
-  const checkTitle = await Events.findOne({ title, _id: { $ne: id } });
+  const checkTitle = await Events.findOne({
+    title,
+    organizer: req.user.organizer,
+    _id: { $ne: id },
+  });
   if (checkTitle)
     throw new BadRequestError("Judul acara event sudah terdaftar");
 
@@ -146,8 +154,9 @@ const updateEvents = async (req) => {
       image,
       category,
       talents,
+      organizer: req.user.organizer,
     },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   return result;
@@ -159,8 +168,12 @@ const updateEvents = async (req) => {
 const deleteEvents = async (req) => {
   const { id } = req.params;
 
-  const result = await Events.findOne({ _id: id });
-  if (!result) throw new NotFoundError(`Tidak ada acara event dengan id: ${id}`);
+  const result = await Events.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
+  if (!result)
+    throw new NotFoundError(`Tidak ada acara event dengan id: ${id}`);
 
   await result.deleteOne();
   return result;
