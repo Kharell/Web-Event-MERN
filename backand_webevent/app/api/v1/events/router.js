@@ -3,19 +3,30 @@ const router = express.Router();
 
 const { create, index, find, update, destroy } = require("./controller");
 
-// Route untuk membuat (create) event baru
-router.post("/events", create);
+const {
+  authenticateUser,
+  authorizeRoles,
+} = require("../../../middlewares/auth");
 
-// Route untuk mengambil semua data event
-router.get("/events", index);
+router.post("/events", authenticateUser, authorizeRoles("organizer"), create);
 
-// Route untuk mengambil satu data event berdasarkan ID
-router.get("/events/:id", find);
+router.get("/events", authenticateUser, authorizeRoles("organizer"), index);
 
-// Route untuk memperbarui data event berdasarkan ID
-router.put("/events/:id", update);
+router.get("/events/:id", authenticateUser, authorizeRoles("organizer"), find);
 
-// Route untuk menghapus data event berdasarkan ID
-router.delete("/events/:id", destroy);
+router.put(
+  "/events/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  update,
+);
+
+("");
+router.delete(
+  "/events/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  destroy,
+);
 
 module.exports = router;

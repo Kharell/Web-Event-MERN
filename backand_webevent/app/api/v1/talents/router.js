@@ -2,15 +2,27 @@
 const express = require("express");
 const router = express.Router();
 
-// Import fungsi controller
 const { create, index, find, update, destroy } = require("./controller");
 
-// Route CRUD talents
-router.post("/talents", create); // Tambah data talent
-router.get("/talents", index); // Tampilkan semua talent
-router.get("/talents/:id", find); // Tampilkan talent berdasarkan ID
-router.put("/talents/:id", update); // Update talent berdasarkan ID
-router.delete("/talents/:id", destroy); // Hapus talent berdasarkan ID
+const {
+  authenticateUser,
+  authorizeRoles,
+} = require("../../../middlewares/auth");
 
-// Ekspor router
+router.post("/talents", authenticateUser, authorizeRoles("organizer"), create);
+router.get("/talents", authenticateUser, authorizeRoles("organizer"), index);
+router.get("/talents/:id", authenticateUser, authorizeRoles("organizer"), find);
+router.put(
+  "/talents/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  update,
+);
+router.delete(
+  "/talents/:id",
+  authenticateUser,
+  authorizeRoles("organizer"),
+  destroy,
+);
+
 module.exports = router;
